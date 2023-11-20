@@ -1,0 +1,22 @@
+app:
+  proxy: 'http://127.0.0.1:7890'
+binance:
+  testnet: false
+  symbol: 'BTC/USDC'
+  api_key: ''
+  secret_key: ''
+orderly:
+  testnet: true
+  symbol: 'BTC/USDC'
+  account_id: '0x091021c323dcd520a2200343aa2da8c1ba037bb418b2134b4593037ec77e4431'
+  orderly_key: 'Cbg1YPJPYzHjKKL3KhtBLtjGHYn1wGBxP7xaPRuYoHHA'
+  orderly_secret: '7JUBqk2fkCBDAqk8ukb42pCuq26F4dEQVXc7kr6pJyPW'
+  rest_endpoint: 'https://qa-api-evm.orderly.org'
+  ws_public_endpoint: 'wss://qa-ws-evm.orderly.org/ws/stream/'
+  ws_private_endpoint: 'wss://qa-ws-private-evm.orderly.org/v2/ws/private/stream/'
+woo:
+  testnet: true
+  symbol: 'BTC/USDT'
+  api_key: 'ZooFkw0izItvBnobplhqRw=='
+  secret_key: 'VOWF62QUQ7KBKPTH5CO4PU26RDMK'
+  app_id: 'dce5d86f-e373-42f7-8afd-f743e18617ca'
