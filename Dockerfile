@@ -9,12 +9,13 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
 WORKDIR /app
-COPY pyproject.toml poetry.lock ./
-RUN touch README.md
+# COPY pyproject.toml poetry.lock ./
+# RUN touch README.md
+COPY . .
 
 # RUN poetry config installer.modern-installation false
 RUN poetry config installer.max-workers 10
-RUN poetry install -n --without dev --no-root --no-ansi && rm -rf "$POETRY_CACHE_DIR"
+RUN poetry install -n --without dev --no-ansi && rm -rf "$POETRY_CACHE_DIR"
 
 FROM python:3.10-slim-bookworm as runtime
 
@@ -23,7 +24,7 @@ ENV VIRTUAL_ENV=/app/.venv \
 
 WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY src ./src
+COPY . .
 COPY ./conf/dev.yml ./config.yml
 EXPOSE 8088
 CMD ["python", "src/liquidation_searcher/main.py", "-c", "config.yml"]
