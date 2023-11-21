@@ -24,6 +24,6 @@ ENV VIRTUAL_ENV=/app/.venv \
 WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY src ./src
-COPY ./conf/local.yml ./config.yml
+COPY ./conf/dev.yml ./config.yml
 EXPOSE 8088
 CMD ["python", "src/liquidation_searcher/main.py", "-c", "config.yml"]
