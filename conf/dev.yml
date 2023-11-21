@@ -12,8 +12,8 @@ orderly:
   orderly_key: 'Ei15c1PpgLqLrV3WzqTVvfqfrGxg7PdZo9ZDHWKMCQ92'
   orderly_secret: 'EdzYoSvboHHzKmVEVJsjLHiaBMMkJQspL5dK71zD3sKE'
   rest_endpoint: 'https://dev-api-v2.orderly.org'
-  ws_public_endpoint: 'wss://dev-ws-v2.orderly.org/ws/stream/'
-  ws_private_endpoint: 'wss://dev-ws-private-v2.orderly.org/v2/ws/private/stream/'
+  ws_public_endpoint: 'wss://dev-ws-v2.orderly.network/ws/stream/'
+  ws_private_endpoint: 'wss://dev-ws-private-v2.orderly.network/v2/ws/private/stream/'
 woo:
   testnet: true
   symbol: 'BTC/USDT'

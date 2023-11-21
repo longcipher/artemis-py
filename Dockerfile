@@ -12,7 +12,9 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 RUN touch README.md
 
-RUN poetry install -n --without dev --no-root && rm -rf "$POETRY_CACHE_DIR"
+# RUN poetry config installer.modern-installation false
+RUN poetry config installer.max-workers 10
+RUN poetry install -n --without dev --no-root --no-ansi && rm -rf "$POETRY_CACHE_DIR"
 
 FROM python:3.10-slim-bookworm as runtime
 
