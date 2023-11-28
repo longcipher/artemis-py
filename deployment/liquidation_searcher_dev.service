@@ -5,8 +5,11 @@ After=network.target network-online.target
 
 [Service]
 Type=simple
-ExecStartPre=/bin/sh -c 'cd /home/akagi201/liquidation-searcher && poetry shell'
-ExecStart=python src/liquidation_searcher/main.py -c conf/dev.yml
+# Disable Python's buffering of STDOUT and STDERR, so that output from the
+# service shows up immediately in systemd's logs
+Environment=PYTHONUNBUFFERED=1
+Environment=VIRTUAL_ENV=/home/akagi201/liquidation-searcher/.venv
+ExecStart=/home/akagi201/liquidation-searcher/.venv/bin/python src/liquidation_searcher/main.py -c conf/dev.yml
 WorkingDirectory=/home/akagi201/liquidation-searcher
 Restart=always
 User=akagi201
