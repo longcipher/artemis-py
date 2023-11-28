@@ -1,7 +1,13 @@
 import asyncio
+import logging
 from typing import List
 
 from liquidation_searcher.types import Collector, Executor, Strategy
+
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 class Engine:
@@ -37,6 +43,7 @@ class Engine:
         collector.start(timeout=30)
         while True:
             event = await collector.get_event_stream()
+            logger.info("collector event: %s", event)
             await self.event_queue.put(event)
 
     async def run_strategy(self):
@@ -48,6 +55,7 @@ class Engine:
     async def run_executor(self):
         while True:
             action = await self.action_queue.get()
+            logger.info("executor action: %s", action)
             await self.executor.execute(action)
 
     async def run(self):

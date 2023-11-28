@@ -10,7 +10,9 @@ from liquidation_searcher.collectors.orderly_liquidation import (
 )
 from liquidation_searcher.engine.core import Engine
 from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
+from liquidation_searcher.router import run_web
 from liquidation_searcher.strategies.direct import DirectStrategy
+from liquidation_searcher.utils.event_loop import get_loop
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
@@ -43,11 +45,15 @@ async def main(args: Namespace):
     orderly_rest_endpoint = config["orderly"]["rest_endpoint"]
     orderly_key = config["orderly"]["orderly_key"]
     orderly_secret = config["orderly"]["orderly_secret"]
+    port = config["app"]["port"]
+
+    loop = get_loop()
 
     engine = Engine()
     orderly_liquidation_collector = OrderlyLiquidationCollector(
         account_id=orderly_account_id,
         endpoint=orderly_ws_public_endpoint,
+        loop=loop,
     )
     engine.add_collector(orderly_liquidation_collector)
     direct_strategy = DirectStrategy()
@@ -59,8 +65,9 @@ async def main(args: Namespace):
         orderly_secret=orderly_secret,
     )
     engine.add_executor(orderly_executor)
+    await run_web(port)
     await engine.run()
 
 
 if __name__ == "__main__":
-    asyncio.run(main(parse_args()))
+    asyncio.run(main(parse_args()), debug=True)

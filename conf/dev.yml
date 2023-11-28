@@ -1,5 +1,6 @@
 app:
   proxy: 'http://127.0.0.1:7890'
+  port: 8088
 binance:
   testnet: false
   symbol: 'BTC/USDC'
