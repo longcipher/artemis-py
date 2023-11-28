@@ -1,0 +1,15 @@
+[Unit]
+Description=Liquidation Searcher
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sh -c 'cd /home/akagi201/liquidation-searcher && poetry shell'
+ExecStart=python src/liquidation_searcher/main.py -c conf/dev.yml
+WorkingDirectory=/home/akagi201/liquidation-searcher
+Restart=always
+User=akagi201
+
+[Install]
+WantedBy=multi-user.target
