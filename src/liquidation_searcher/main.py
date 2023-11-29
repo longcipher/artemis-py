@@ -5,8 +5,11 @@ from argparse import Namespace
 
 import yaml
 
-from liquidation_searcher.collectors.orderly_liquidation import (
-    OrderlyLiquidationCollector,
+from liquidation_searcher.collectors.orderly_liquidation_rest import (
+    OrderlyLiquidationRestCollector,
+)
+from liquidation_searcher.collectors.orderly_liquidation_ws import (
+    OrderlyLiquidationWsCollector,
 )
 from liquidation_searcher.engine.core import Engine
 from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
@@ -50,12 +53,18 @@ async def main(args: Namespace):
     loop = get_loop()
 
     engine = Engine()
-    orderly_liquidation_collector = OrderlyLiquidationCollector(
+    orderly_liquidation_ws_collector = OrderlyLiquidationWsCollector(
         account_id=orderly_account_id,
         endpoint=orderly_ws_public_endpoint,
         loop=loop,
     )
-    engine.add_collector(orderly_liquidation_collector)
+    engine.add_collector(orderly_liquidation_ws_collector)
+    orderly_liquidation_rest_collector = OrderlyLiquidationRestCollector(
+        account_id=orderly_account_id,
+        endpoint=orderly_rest_endpoint,
+        loop=loop,
+    )
+    engine.add_collector(orderly_liquidation_rest_collector)
     direct_strategy = DirectStrategy()
     engine.add_strategy(direct_strategy)
     orderly_executor = OrderlyExecutor(
@@ -65,6 +74,7 @@ async def main(args: Namespace):
         orderly_secret=orderly_secret,
     )
     engine.add_executor(orderly_executor)
+    # only for k8s health check now
     await run_web(port)
     await engine.run()
 

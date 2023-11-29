@@ -3,7 +3,7 @@ import logging
 
 from orderly_sdk.rest import AsyncClient
 
-from liquidation_searcher.types import Executor
+from liquidation_searcher.types import ActionType, Executor
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
@@ -21,39 +21,27 @@ class OrderlyExecutor(Executor):
         )
 
     async def execute(self, action):
-        # "data":[
-        #     {
-        #        "liquidationId":1,
-        #        "timestamp":1684821114917,
-        #        "type":"liquidated",
-        #        "positionsByPerp":[
-        #           {
-        #              "symbol":"PERP_NEAR_USDC",
-        #              "positionQty":12.6,
-        #              "liquidatorFee":0.0175
-        #           }
-        #        ]
-        #     },
-        #     ...
-        #  ]
-        for liquidation in action:
-            if liquidation["type"] == "liquidated":
+        if action["action_type"] == ActionType.ORDERLY_LIQUIDATION_ORDER:
+            if action["type"] == "liquidated":
                 json = dict(
-                    liquidation_id=liquidation["liquidationId"],
+                    liquidation_id=action["liquidation_id"],
                     ratio_qty_request=1,
                 )
                 await self.orderly_client.claim_liquidated_positions(json)
-            elif liquidation["type"] == "claim":
-                for position in liquidation["positionsByPerp"]:
+            elif action["type"] == "claim":
+                for position in action["positions_by_perp"]:
                     json = dict(
-                        liquidation_id=liquidation["liquidationId"],
+                        liquidation_id=action["liquidation_id"],
                         symbol=position["symbol"],
-                        qty_request=position["positionQty"],
+                        qty_request=position["position_qty"],
                     )
                     await self.orderly_client.claim_insurance_fund(json)
             else:
-                logger.error(f"Unknown liquidation type: {liquidation['type']}")
-            await asyncio.sleep(5)
+                logger.error(f"Unknown liquidation type: {action['type']}")
+
+            # wait for position transfer
+            await asyncio.sleep(15)
+
             positions = await self.orderly_client.get_all_positions()
             for position in positions["rows"]:
                 side = ""
@@ -70,3 +58,6 @@ class OrderlyExecutor(Executor):
                         side=side,
                     )
                     await self.orderly_client.create_order(json)
+        else:
+            logger.error(f"Unknown action type: {action['action_type']}")
+            return

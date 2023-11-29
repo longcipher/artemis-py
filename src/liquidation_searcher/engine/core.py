@@ -43,8 +43,9 @@ class Engine:
         collector.start(timeout=30)
         while True:
             event = await collector.get_event_stream()
-            logger.info("collector event: %s", event)
-            await self.event_queue.put(event)
+            if event is not None:
+                logger.info("collector event: %s", event)
+                await self.event_queue.put(event)
 
     async def run_strategy(self):
         while True:

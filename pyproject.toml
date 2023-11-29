@@ -10,8 +10,8 @@ packages = [{include = "liquidation_searcher", from = "src"}]
 python = "^3.10"
 argparse = "^1.4.0"
 pyyaml = "^6.0.1"
-ccxt = "^4.1.59"
-orderly-sdk = { git = "https://github.com/Akagi201/orderly-sdk-py.git", branch = "master" }
+ccxt = "^4.1.69"
+orderly-sdk = "0.1.3"
 wootrade-sdk = "^0.1.1"
 types-pyyaml = "^6.0.12.12"
 aiohttp = "^3.9.1"
@@ -19,7 +19,7 @@ aiohttp = "^3.9.1"
 [tool.poetry.group.dev.dependencies]
 black = "^23.11.0"
 ruff = "^0.1.6"
-mypy = "^1.7.0"
+mypy = "^1.7.1"
 
 [build-system]
 requires = ["poetry-core"]

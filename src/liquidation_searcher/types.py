@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from enum import Enum
 
 
 class Collector(ABC):
@@ -25,3 +26,12 @@ class Executor(ABC):
     @abstractmethod
     async def execute(self, action):
         pass
+
+
+class EventType(str, Enum):
+    ORDERLY_LIQUIDATION_REST = "orderly_liquidation_rest"
+    ORDERLY_LIQUIDATION_WS = "orderly_liquidation_ws"
+
+
+class ActionType(str, Enum):
+    ORDERLY_LIQUIDATION_ORDER = "orderly_liquidation_order"

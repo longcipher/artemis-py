@@ -2,11 +2,11 @@ import asyncio
 
 from orderly_sdk.ws import OrderlyPublicWsManager
 
-from liquidation_searcher.types import Collector
+from liquidation_searcher.types import Collector, EventType
 from liquidation_searcher.utils.event_loop import get_loop
 
 
-class OrderlyLiquidationCollector(Collector):
+class OrderlyLiquidationWsCollector(Collector):
     def __init__(self, account_id, endpoint, loop=None):
         self.orderly_ws_client = OrderlyPublicWsManager(
             account_id=account_id,
@@ -16,11 +16,13 @@ class OrderlyLiquidationCollector(Collector):
         self.queue = asyncio.Queue(maxsize=512)
         self.loop = loop or get_loop()
 
-    async def _run(self, timeout=30):
-        self.orderly_ws_client.start(timeout=timeout)
+    async def _run(self, timeout):
+        self.orderly_ws_client.start(timeout=15)
         while True:
-            res = await self.orderly_ws_client.recv("liquidation")
-            await self.queue.put(res)
+            res = await self.orderly_ws_client.recv("liquidation", timeout=timeout)
+            for liquidation in res["data"]:
+                liquidation["event_type"] = EventType.ORDERLY_LIQUIDATION_WS
+                await self.queue.put(liquidation)
 
     def start(self, timeout=30):
         self.loop.call_soon_threadsafe(asyncio.create_task, self._run(timeout))
