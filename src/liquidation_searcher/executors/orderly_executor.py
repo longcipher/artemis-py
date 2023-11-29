@@ -43,7 +43,8 @@ class OrderlyExecutor(Executor):
             await asyncio.sleep(15)
 
             positions = await self.orderly_client.get_all_positions()
-            for position in positions["rows"]:
+            logger.info("orderly executor positions: %s", positions)
+            for position in positions["data"]["rows"]:
                 side = ""
                 if position["position_qty"] > 0:
                     side = "SELL"
@@ -51,13 +52,14 @@ class OrderlyExecutor(Executor):
                     side = "BUY"
                 else:
                     logger.error(f"Unknown position qty: {position['position_qty']}")
-                if side != "":
-                    json = dict(
-                        symbol=position["symbol"],
-                        order_type="MARKET",
-                        side=side,
-                    )
-                    await self.orderly_client.create_order(json)
+                    return
+                json = dict(
+                    symbol=position["symbol"],
+                    order_type="MARKET",
+                    side=side,
+                    order_quantity=abs(position["position_qty"]),
+                )
+                await self.orderly_client.create_order(json)
         else:
             logger.error(f"Unknown action type: {action['action_type']}")
             return

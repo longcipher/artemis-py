@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 
 from liquidation_searcher.types import ActionType, EventType, Strategy
 
@@ -18,10 +17,10 @@ class DirectStrategy(Strategy):
 
     async def process_event(self, event):
         logger.info("DirectStrategy process_event: %s", event)
-        ts = event["timestamp"]
+        # ts = event["timestamp"]
         # filter outdated events
-        if datetime.now().timestamp() * 1000 - ts > 300:
-            return
+        # if datetime.now().timestamp() * 1000 - ts > 300:
+        #     return
         if event["event_type"] == EventType.ORDERLY_LIQUIDATION_REST:
             action = {
                 "action_type": ActionType.ORDERLY_LIQUIDATION_ORDER,
@@ -38,6 +37,7 @@ class DirectStrategy(Strategy):
                         "liquidator_fee": position["liquidator_fee"],
                     }
                 )
+            logger.info("DirectStrategy rest action: %s", action)
             return action
         elif event["event_type"] == EventType.ORDERLY_LIQUIDATION_WS:
             action = {

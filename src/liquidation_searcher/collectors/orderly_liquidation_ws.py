@@ -1,9 +1,15 @@
 import asyncio
+import logging
 
 from orderly_sdk.ws import OrderlyPublicWsManager
 
 from liquidation_searcher.types import Collector, EventType
 from liquidation_searcher.utils.event_loop import get_loop
+
+logging.basicConfig(
+    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
+)
+logger = logging.getLogger(__name__)
 
 
 class OrderlyLiquidationWsCollector(Collector):
@@ -20,7 +26,8 @@ class OrderlyLiquidationWsCollector(Collector):
         self.orderly_ws_client.start(timeout=15)
         while True:
             res = await self.orderly_ws_client.recv("liquidation", timeout=timeout)
-            for liquidation in res["data"]:
+            logger.info("orderly liquidation ws collector: %s", res)
+            for liquidation in res:
                 liquidation["event_type"] = EventType.ORDERLY_LIQUIDATION_WS
                 await self.queue.put(liquidation)
 
@@ -28,4 +35,7 @@ class OrderlyLiquidationWsCollector(Collector):
         self.loop.call_soon_threadsafe(asyncio.create_task, self._run(timeout))
 
     async def get_event_stream(self):
-        await asyncio.wait_for(self.queue.get(), timeout=None)
+        if not self.queue.empty():
+            await self.queue.get()
+        else:
+            return

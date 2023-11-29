@@ -44,20 +44,29 @@ class Engine:
         while True:
             event = await collector.get_event_stream()
             if event is not None:
-                logger.info("collector event: %s", event)
+                logger.info("engine collector event: %s", event)
                 await self.event_queue.put(event)
+            await asyncio.sleep(0.1)
 
     async def run_strategy(self):
         while True:
-            event = await self.event_queue.get()
-            action = await self.strategy.process_event(event)
-            await self.action_queue.put(action)
+            if not self.event_queue.empty():
+                event = await self.event_queue.get()
+                logger.info("engine strategy event: %s", event)
+                if event is not None:
+                    action = await self.strategy.process_event(event)
+                    await self.action_queue.put(action)
+            await asyncio.sleep(0.1)
 
     async def run_executor(self):
         while True:
-            action = await self.action_queue.get()
-            logger.info("executor action: %s", action)
-            await self.executor.execute(action)
+            if not self.action_queue.empty():
+                action = await self.action_queue.get()
+                logger.info("engine executor action: %s", action)
+                if action is not None:
+                    logger.info("executor action: %s", action)
+                    await self.executor.execute(action)
+            await asyncio.sleep(0.1)
 
     async def run(self):
         tasks = []
