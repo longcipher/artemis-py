@@ -25,7 +25,7 @@ class OrderlyExecutor(Executor):
             if action["type"] == "liquidated":
                 json = dict(
                     liquidation_id=action["liquidation_id"],
-                    ratio_qty_request=1,
+                    ratio_qty_request=0.001,
                 )
                 await self.orderly_client.claim_liquidated_positions(json)
             elif action["type"] == "claim":
@@ -33,7 +33,7 @@ class OrderlyExecutor(Executor):
                     json = dict(
                         liquidation_id=action["liquidation_id"],
                         symbol=position["symbol"],
-                        qty_request=position["position_qty"],
+                        qty_request=position["position_qty"] / 1000,
                     )
                     await self.orderly_client.claim_insurance_fund(json)
             else:
