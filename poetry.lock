@@ -930,13 +930,13 @@ files = [
 
 [[package]]
 name = "orderly-sdk"
-version = "0.1.4"
+version = "0.1.5"
 description = "Orderly Rest and Websocket SDK"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "orderly_sdk-0.1.4-py3-none-any.whl", hash = "sha256:0ce8288c747e08b3995520fd74b6d127857cc4d7b544313b4224d35e13ff8fe9"},
-    {file = "orderly_sdk-0.1.4.tar.gz", hash = "sha256:22aba8ebd53da6a2d4602f724e6c865d52d5a5db36d8e7f2faa7b804d79c1d32"},
+    {file = "orderly_sdk-0.1.5-py3-none-any.whl", hash = "sha256:329d5f08459a2af26f4fdd83e2b4d946bf1a6e22422c34d0855a5d7cafcc348b"},
+    {file = "orderly_sdk-0.1.5.tar.gz", hash = "sha256:faba9da49ec7f81424eee1188af0255fb967dad7e0f4ae196bc53b90dc1a6f3f"},
 ]
 
 [package.dependencies]
@@ -1500,4 +1500,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "b32d19429b734c9e5c4984a0fd36c8346fd71f5d3c4a7aa93f47d0d31439f4bc"
+content-hash = "ecb0c8c1c9b9ca98e9eebfabf8301eccc71dba845de8b704c36629f3f079ccb0"

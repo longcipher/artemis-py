@@ -1,5 +1,7 @@
 import asyncio
 import logging
+from decimal import ROUND_DOWN, Decimal
+from typing import Dict
 
 from orderly_sdk.rest import AsyncClient
 
@@ -12,6 +14,8 @@ logger = logging.getLogger(__name__)
 
 
 class OrderlyExecutor(Executor):
+    symbol_base_ticks: Dict[str, Decimal]
+
     def __init__(self, account_id, orderly_key, orderly_secret, endpoint):
         self.orderly_client = AsyncClient(
             account_id=account_id,
@@ -19,6 +23,12 @@ class OrderlyExecutor(Executor):
             orderly_secret=orderly_secret,
             endpoint=endpoint,
         )
+        self.symbol_base_ticks = dict()
+
+    async def sync_state(self):
+        symbols = await self.orderly_client.get_available_symbols()
+        for symbol in symbols["data"]["rows"]:
+            self.symbol_base_ticks[symbol["symbol"]] = Decimal(symbol["base_tick"])
 
     async def execute(self, action):
         if action["action_type"] == ActionType.ORDERLY_LIQUIDATION_ORDER:
@@ -33,7 +43,10 @@ class OrderlyExecutor(Executor):
                     json = dict(
                         liquidation_id=action["liquidation_id"],
                         symbol=position["symbol"],
-                        qty_request=position["position_qty"] / 1000,
+                        qty_request=Decimal(position["position_qty"] / 1000).quantize(
+                            self.symbol_base_ticks[position["symbol"]],
+                            rounding=ROUND_DOWN,
+                        ),
                     )
                     logger.info("orderly executor claim_insurance_fund json: %s", json)
                     await self.orderly_client.claim_insurance_fund(json)
@@ -61,7 +74,8 @@ class OrderlyExecutor(Executor):
                     order_quantity=abs(position["position_qty"]),
                 )
                 logger.info("orderly executor create_order json: %s", json)
-                await self.orderly_client.create_order(json)
+                res = await self.orderly_client.create_order(json)
+                logger.info("orderly executor create_order res: %s", res)
         else:
             logger.error(f"Unknown action type: {action['action_type']}")
             return

@@ -60,6 +60,7 @@ class Engine:
             await asyncio.sleep(0.1)
 
     async def run_executor(self):
+        await self.executor.sync_state()
         while True:
             if not self.action_queue.empty():
                 action = await self.action_queue.get()

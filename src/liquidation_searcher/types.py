@@ -24,6 +24,10 @@ class Strategy(ABC):
 
 class Executor(ABC):
     @abstractmethod
+    async def sync_state(self):
+        pass
+
+    @abstractmethod
     async def execute(self, action):
         pass
 
