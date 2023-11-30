@@ -49,6 +49,7 @@ class Engine:
             await asyncio.sleep(0.1)
 
     async def run_strategy(self):
+        await self.strategy.sync_state()
         while True:
             if not self.event_queue.empty():
                 event = await self.event_queue.get()

@@ -35,3 +35,8 @@ class EventType(str, Enum):
 
 class ActionType(str, Enum):
     ORDERLY_LIQUIDATION_ORDER = "orderly_liquidation_order"
+
+
+class LiquidationType(str, Enum):
+    LIQUIDATED = "liquidated"
+    CLAIM = "claim"

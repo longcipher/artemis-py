@@ -222,13 +222,13 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "ccxt"
-version = "4.1.69"
+version = "4.1.70"
 description = "A JavaScript / TypeScript / Python / C# / PHP cryptocurrency trading library with support for 130+ exchanges"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ccxt-4.1.69-py2.py3-none-any.whl", hash = "sha256:43eadea153a2bfaff0aee69c1b8bace8a2060674b69bfda3eafa8d2464df6a43"},
-    {file = "ccxt-4.1.69.tar.gz", hash = "sha256:84abd40b870229aa7ac107c928cd63d067de72721f80b9f59dbfe210c379ab26"},
+    {file = "ccxt-4.1.70-py2.py3-none-any.whl", hash = "sha256:499549067f43437ef370f1900cfdd1352b98ab2091c6dbc9125eda591aa9bf73"},
+    {file = "ccxt-4.1.70.tar.gz", hash = "sha256:764f374d14b26ff35d3be1d07500108b19374d2d500e1675452079ab8b633848"},
 ]
 
 [package.dependencies]
@@ -930,13 +930,13 @@ files = [
 
 [[package]]
 name = "orderly-sdk"
-version = "0.1.3"
+version = "0.1.4"
 description = "Orderly Rest and Websocket SDK"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "orderly_sdk-0.1.3-py3-none-any.whl", hash = "sha256:5bda7ee4afe0015c632445e794bab28fe36a3042880baff8e00ada385be56676"},
-    {file = "orderly_sdk-0.1.3.tar.gz", hash = "sha256:0cb3d8fbbad804497b2c1e5b6aee5fa4d873a9a089389cad4f221747fd6e6b84"},
+    {file = "orderly_sdk-0.1.4-py3-none-any.whl", hash = "sha256:0ce8288c747e08b3995520fd74b6d127857cc4d7b544313b4224d35e13ff8fe9"},
+    {file = "orderly_sdk-0.1.4.tar.gz", hash = "sha256:22aba8ebd53da6a2d4602f724e6c865d52d5a5db36d8e7f2faa7b804d79c1d32"},
 ]
 
 [package.dependencies]
@@ -1500,4 +1500,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c107cf3a3572d54cdbfcb1c5e03ef1d7a412dcf1383182a724610635ff69b9d6"
+content-hash = "b32d19429b734c9e5c4984a0fd36c8346fd71f5d3c4a7aa93f47d0d31439f4bc"
