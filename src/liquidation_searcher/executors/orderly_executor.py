@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 
 class OrderlyExecutor(Executor):
-    symbol_base_ticks: Dict[str, Decimal]
+    symbol_base_ticks: Dict[str, str]
 
     def __init__(self, account_id, orderly_key, orderly_secret, endpoint):
         self.orderly_client = AsyncClient(
@@ -28,7 +28,7 @@ class OrderlyExecutor(Executor):
     async def sync_state(self):
         symbols = await self.orderly_client.get_available_symbols()
         for symbol in symbols["data"]["rows"]:
-            self.symbol_base_ticks[symbol["symbol"]] = Decimal(symbol["base_tick"])
+            self.symbol_base_ticks[symbol["symbol"]] = str(symbol["base_tick"])
 
     async def execute(self, action):
         if action["action_type"] == ActionType.ORDERLY_LIQUIDATION_ORDER:
@@ -43,10 +43,7 @@ class OrderlyExecutor(Executor):
                     json = dict(
                         liquidation_id=action["liquidation_id"],
                         symbol=position["symbol"],
-                        qty_request=Decimal(position["position_qty"] / 1000).quantize(
-                            self.symbol_base_ticks[position["symbol"]],
-                            rounding=ROUND_DOWN,
-                        ),
+                        qty_request=position["position_qty"] / 1000,
                     )
                     logger.info("orderly executor claim_insurance_fund json: %s", json)
                     await self.orderly_client.claim_insurance_fund(json)
@@ -71,7 +68,12 @@ class OrderlyExecutor(Executor):
                     symbol=position["symbol"],
                     order_type="MARKET",
                     side=side,
-                    order_quantity=abs(position["position_qty"]),
+                    order_quantity=float(
+                        Decimal(abs(position["position_qty"])).quantize(
+                            Decimal(self.symbol_base_ticks[position["symbol"]]),
+                            rounding=ROUND_DOWN,
+                        )
+                    ),
                 )
                 logger.info("orderly executor create_order json: %s", json)
                 res = await self.orderly_client.create_order(json)
