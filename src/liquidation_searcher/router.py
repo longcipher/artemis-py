@@ -25,5 +25,5 @@ async def run_web(port):
     app = web_app(port)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "127.0.0.1", port)
+    site = web.TCPSite(runner, "0.0.0.0", port)
     await site.start()
