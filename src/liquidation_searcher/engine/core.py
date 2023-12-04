@@ -20,6 +20,8 @@ class Engine:
         action_channel_capacity: int = 512,
     ):
         self.collectors = []
+        self.strategies = []
+        self.executors = []
         self.event_channel_capacity = event_channel_capacity
         self.action_channel_capacity = action_channel_capacity
         self.event_queue = asyncio.Queue(self.event_channel_capacity)
