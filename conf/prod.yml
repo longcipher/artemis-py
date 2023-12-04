@@ -6,3 +6,10 @@ orderly:
   rest_endpoint: 'https://api-evm.orderly.network'
   ws_public_endpoint: 'wss://ws-evm.orderly.network'
   ws_private_endpoint: 'wss://ws-private-evm.orderly.network'
+  claim_percent: 0.001
+  symbol_qty:
+    # notional range: 100U ~ 1000U
+    - ['PERP_BTC_USDC', [0.002, 0.02]]
+    - ['PERP_ETH_USDC', [0.04, 0.4]]
+    - ['PERP_NEAR_USDC', [46, 460]]
+    - ['PERP_WOO_USDC', [425, 4250]]

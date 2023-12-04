@@ -14,7 +14,7 @@ class OrderlyHedgeStrategy(Strategy):
         pass
 
     async def process_event(self, event):
-        logger.info("DirectStrategy process_event: {}", event)
+        logger.info("OrderlyHedgeStrategy process_event: {}", event)
         # ts = event["timestamp"]
         # filter outdated events
         # if datetime.now().timestamp() * 1000 - ts > 300:
@@ -40,7 +40,7 @@ class OrderlyHedgeStrategy(Strategy):
                 # only process the first position
                 if action["type"] == LiquidationType.CLAIM:
                     break
-            logger.info("DirectStrategy rest action: {}", action)
+            logger.info("OrderlyHedgeStrategy rest action: {}", action)
             self.processed_liquidations.add(action["liquidation_id"])
             return action
         elif event["event_type"] == EventType.ORDERLY_LIQUIDATION_WS:
@@ -64,7 +64,7 @@ class OrderlyHedgeStrategy(Strategy):
                 # only process the first position
                 if action["type"] == LiquidationType.CLAIM:
                     break
-            logger.info("DirectStrategy ws action: {}", action)
+            logger.info("OrderlyHedgeStrategy ws action: {}", action)
             self.processed_liquidations.add(action["liquidation_id"])
             return action
         else:

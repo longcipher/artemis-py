@@ -2,7 +2,14 @@ app:
   # proxy: 'http://127.0.0.1:7890'
   port: 8088
 orderly:
-  account_id: '0x4546c076e1d6ae0013195316c0c7b405699c839bb760a42f41005103134dcf3f'
+  account_id: '0x39f80501b0c86b13dab33bf0a4a7639dfc87d8143ec6b97a713b2ceda15cd651'
   rest_endpoint: 'https://testnet-api-evm.orderly.org'
   ws_public_endpoint: 'wss://testnet-ws-evm.orderly.network/ws/stream/'
   ws_private_endpoint: 'wss://testnet-ws-private-evm.orderly.network/v2/ws/private/stream/'
+  claim_percent: 0.001
+  symbol_qty:
+    # notional range: 100U ~ 1000U
+    - ['PERP_BTC_USDC', [0.002, 0.02]]
+    - ['PERP_ETH_USDC', [0.04, 0.4]]
+    - ['PERP_NEAR_USDC', [46, 460]]
+    - ['PERP_WOO_USDC', [425, 4250]]

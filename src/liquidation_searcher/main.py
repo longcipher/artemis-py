@@ -15,6 +15,7 @@ from liquidation_searcher.engine.core import Engine
 from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
 from liquidation_searcher.router import run_web
 from liquidation_searcher.strategies.orderly_hedge import OrderlyHedgeStrategy
+from liquidation_searcher.utils.convert import parse_symbol_qty
 from liquidation_searcher.utils.event_loop import get_loop
 from liquidation_searcher.utils.log import logger, set_level
 
@@ -49,6 +50,10 @@ async def main(args: Namespace):
         logger.error("ORDERLY_KEY or ORDERLY_SECRET is not set")
         raise ValueError("ORDERLY_KEY or ORDERLY_SECRET is not set")
     port = config["app"]["port"]
+    claim_percent = config["orderly"]["claim_percent"]
+    symbol_qty = parse_symbol_qty(config["orderly"]["symbol_qty"])
+
+    logger.info("claim_percent: {}, symbol_qty: {}", claim_percent, symbol_qty)
 
     loop = get_loop()
 
@@ -72,6 +77,8 @@ async def main(args: Namespace):
         endpoint=orderly_rest_endpoint,
         orderly_key=orderly_key,
         orderly_secret=orderly_secret,
+        claim_percent=claim_percent,
+        symbol_qty=symbol_qty,
     )
     engine.add_executor(orderly_executor)
     # only for k8s health check now

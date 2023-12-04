@@ -937,13 +937,13 @@ files = [
 
 [[package]]
 name = "orderly-sdk"
-version = "0.1.5"
+version = "0.1.7"
 description = "Orderly Rest and Websocket SDK"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "orderly_sdk-0.1.5-py3-none-any.whl", hash = "sha256:329d5f08459a2af26f4fdd83e2b4d946bf1a6e22422c34d0855a5d7cafcc348b"},
-    {file = "orderly_sdk-0.1.5.tar.gz", hash = "sha256:faba9da49ec7f81424eee1188af0255fb967dad7e0f4ae196bc53b90dc1a6f3f"},
+    {file = "orderly_sdk-0.1.7-py3-none-any.whl", hash = "sha256:c2eb0e09148ab590ce03945ad7d316435a4e1c81011731ecdf26ed76997a9aa7"},
+    {file = "orderly_sdk-0.1.7.tar.gz", hash = "sha256:f4895e08128428242ed2ea708a0dee0b5294f6711ced5ed8c89abaa14d6ada0c"},
 ]
 
 [package.dependencies]
@@ -1521,4 +1521,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d7bf2de933756a7f2305bbaae76c3874f68aa0ca3e72ad15e9d029160576de85"
+content-hash = "a7f3a815f31ad044249ef919cd28cddf4389619ad28dbe455f97b77680558264"
