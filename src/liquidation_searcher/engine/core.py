@@ -9,6 +9,7 @@ class Engine:
     collectors: List[Collector]
     strategies: List[Strategy]
     executors: List[Executor]
+    tasks: List[asyncio.Task]
     event_channel_capacity: int
     action_channel_capacity: int
     event_queue: asyncio.Queue
@@ -22,6 +23,7 @@ class Engine:
         self.collectors = []
         self.strategies = []
         self.executors = []
+        self.tasks = []
         self.event_channel_capacity = event_channel_capacity
         self.action_channel_capacity = action_channel_capacity
         self.event_queue = asyncio.Queue(self.event_channel_capacity)
