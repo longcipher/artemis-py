@@ -110,8 +110,10 @@ class OrderlyExecutor(Executor):
                 elif position["position_qty"] < 0:
                     side = "BUY"
                 else:
-                    logger.error(f"Unknown position qty: {position['position_qty']}")
-                    return
+                    logger.error(
+                        f"Unknown position symbol: {position['symbol']}, qty: {position['position_qty']}"
+                    )
+                    continue
                 json = dict(
                     symbol=position["symbol"],
                     order_type="MARKET",
@@ -119,7 +121,7 @@ class OrderlyExecutor(Executor):
                     order_quantity=self.format_qty(
                         position["symbol"], abs(position["position_qty"])
                     ),
-                    reduce_only=True,
+                    # reduce_only=True,
                 )
                 logger.info("orderly executor create_order json: {}", json)
                 res = await self.orderly_client.create_order(json)
