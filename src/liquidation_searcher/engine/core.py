@@ -7,8 +7,8 @@ from liquidation_searcher.utils.log import logger
 
 class Engine:
     collectors: List[Collector]
-    strategy: Strategy
-    executor: Executor
+    strategies: List[Strategy]
+    executors: List[Executor]
     event_channel_capacity: int
     action_channel_capacity: int
     event_queue: asyncio.Queue
@@ -29,10 +29,10 @@ class Engine:
         self.collectors.append(collector)
 
     def add_strategy(self, strategy: Strategy):
-        self.strategy = strategy
+        self.strategies.append(strategy)
 
     def add_executor(self, executor: Executor):
-        self.executor = executor
+        self.executors.append(executor)
 
     async def run_collector(self, collector: Collector):
         collector.start(timeout=30)
@@ -43,32 +43,34 @@ class Engine:
                 await self.event_queue.put(event)
             await asyncio.sleep(0.1)
 
-    async def run_strategy(self):
-        await self.strategy.sync_state()
+    async def run_strategy(self, strategy: Strategy):
+        await strategy.sync_state()
         while True:
             if not self.event_queue.empty():
                 event = await self.event_queue.get()
                 logger.info("engine strategy event: {}", event)
                 if event is not None:
-                    action = await self.strategy.process_event(event)
+                    action = await strategy.process_event(event)
                     await self.action_queue.put(action)
             await asyncio.sleep(0.1)
 
-    async def run_executor(self):
-        await self.executor.sync_state()
+    async def run_executor(self, executor: Executor):
+        await executor.sync_state()
         while True:
             if not self.action_queue.empty():
                 action = await self.action_queue.get()
                 logger.info("engine executor action: {}", action)
                 if action is not None:
                     logger.info("executor action: {}", action)
-                    await self.executor.execute(action)
+                    await executor.execute(action)
             await asyncio.sleep(0.1)
 
     async def run(self):
         tasks = []
-        tasks.append(asyncio.create_task(self.run_executor()))
-        tasks.append(asyncio.create_task(self.run_strategy()))
+        for executor in self.executors:
+            tasks.append(asyncio.create_task(self.run_executor(executor)))
+        for strategy in self.strategies:
+            tasks.append(asyncio.create_task(self.run_strategy(strategy)))
         for collector in self.collectors:
             tasks.append(asyncio.create_task(self.run_collector(collector)))
         await asyncio.gather(*tasks)
