@@ -4,7 +4,7 @@ from liquidation_searcher.types import ActionType, EventType, LiquidationType, S
 from liquidation_searcher.utils.log import logger
 
 
-class DirectStrategy(Strategy):
+class OrderlyHedgeStrategy(Strategy):
     processed_liquidations: Set[int]
 
     def __init__(self):
@@ -64,7 +64,7 @@ class DirectStrategy(Strategy):
                 # only process the first position
                 if action["type"] == LiquidationType.CLAIM:
                     break
-            logger.info("DirectStrategy ws action: %s", action)
+            logger.info("DirectStrategy ws action: {}", action)
             self.processed_liquidations.add(action["liquidation_id"])
             return action
         else:

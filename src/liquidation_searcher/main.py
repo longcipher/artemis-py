@@ -13,7 +13,7 @@ from liquidation_searcher.collectors.orderly_liquidation_ws import (
 from liquidation_searcher.engine.core import Engine
 from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
 from liquidation_searcher.router import run_web
-from liquidation_searcher.strategies.direct import DirectStrategy
+from liquidation_searcher.strategies.orderly_hedge import OrderlyHedgeStrategy
 from liquidation_searcher.utils.event_loop import get_loop
 from liquidation_searcher.utils.log import logger, set_level
 
@@ -61,7 +61,7 @@ async def main(args: Namespace):
         loop=loop,
     )
     engine.add_collector(orderly_liquidation_rest_collector)
-    direct_strategy = DirectStrategy()
+    direct_strategy = OrderlyHedgeStrategy()
     engine.add_strategy(direct_strategy)
     orderly_executor = OrderlyExecutor(
         account_id=orderly_account_id,
