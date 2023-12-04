@@ -21,7 +21,7 @@ class OrderlyLiquidationWsCollector(Collector):
         self.orderly_ws_client.start(timeout=15)
         while True:
             res = await self.orderly_ws_client.recv("liquidation", timeout=timeout)
-            logger.info("orderly liquidation ws collector: {}", res)
+            logger.debug("orderly liquidation ws collector: {}", res)
             for liquidation in res:
                 liquidation["event_type"] = EventType.ORDERLY_LIQUIDATION_WS
                 await self.queue.put(liquidation)

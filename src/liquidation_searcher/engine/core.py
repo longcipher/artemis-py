@@ -45,7 +45,7 @@ class Engine:
             for collector in self.collectors:
                 event = await collector.get_event_stream()
                 if event is not None:
-                    logger.info("engine collector event: {}", event)
+                    logger.debug("engine collector event: {}", event)
                     await self.event_queue.put(event)
             await asyncio.sleep(0.1)
 
@@ -56,7 +56,7 @@ class Engine:
             if not self.event_queue.empty():
                 event = await self.event_queue.get()
                 if event is not None:
-                    logger.info("engine strategy event: {}", event)
+                    logger.debug("engine strategy event: {}", event)
 
                     async def process_event(strategy, event):
                         action = await strategy.process_event(event)
@@ -77,7 +77,7 @@ class Engine:
             if not self.action_queue.empty():
                 action = await self.action_queue.get()
                 if action is not None:
-                    logger.info("engine executor action: {}", action)
+                    logger.debug("engine executor action: {}", action)
 
                     async def execute(executor, action):
                         await executor.execute(action)

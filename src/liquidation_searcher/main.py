@@ -53,8 +53,6 @@ async def main(args: Namespace):
     claim_percent = config["orderly"]["claim_percent"]
     symbol_qty = parse_symbol_qty(config["orderly"]["symbol_qty"])
 
-    logger.info("claim_percent: {}, symbol_qty: {}", claim_percent, symbol_qty)
-
     loop = get_loop()
 
     engine = Engine()
