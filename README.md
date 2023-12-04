@@ -23,6 +23,36 @@ You can read more details from the [docs](/docs)
 /deployment                          - reference systemd unit file
 ```
 
+## Configurations
+
+The configurations contain two parts, you can refer to the example files:
+
+plaintext config: [staging.yml](/conf/staging.yml)
+
+```yaml
+app:
+  port: 8088 # health check port
+orderly:
+  account_id: '' # your account id
+  rest_endpoint: 'https://testnet-api-evm.orderly.org'
+  ws_public_endpoint: 'wss://testnet-ws-evm.orderly.network/ws/stream/'
+  ws_private_endpoint: 'wss://testnet-ws-private-evm.orderly.network/v2/ws/private/stream/'
+  claim_percent: 0.001 # claim percent of the liquidation quantity
+  symbol_qty:
+    # notional range: 100U ~ 1000U, 10x leverage
+    - ['PERP_BTC_USDC', [0.02, 0.2]]
+    - ['PERP_ETH_USDC', [0.4, 4]]
+    - ['PERP_NEAR_USDC', [460, 4600]]
+    - ['PERP_WOO_USDC', [4250, 42500]]
+```
+
+secret config: [.envrc.example](/.envrc.example)
+
+```sh
+export ORDERLY_KEY=
+export ORDERLY_SECRET=
+```
+
 ## Run on local machine
 
 The project uses [poetry](https://python-poetry.org/) to manage dependencies and virtualenv.
