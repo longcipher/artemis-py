@@ -7,8 +7,8 @@ binance:
   api_key: ''
   secret_key: ''
 orderly:
-  testnet: true
-  symbol: 'BTC/USDC'
+  # testnet: true
+  # symbol: 'BTC/USDC'
   account_id: '0x091021c323dcd520a2200343aa2da8c1ba037bb418b2134b4593037ec77e4431'
   orderly_key: 'Cbg1YPJPYzHjKKL3KhtBLtjGHYn1wGBxP7xaPRuYoHHA'
   orderly_secret: '7JUBqk2fkCBDAqk8ukb42pCuq26F4dEQVXc7kr6pJyPW'

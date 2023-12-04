@@ -1,15 +1,10 @@
 import asyncio
-import logging
 
 from orderly_sdk.ws import OrderlyPublicWsManager
 
 from liquidation_searcher.types import Collector, EventType
 from liquidation_searcher.utils.event_loop import get_loop
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from liquidation_searcher.utils.log import logger
 
 
 class OrderlyLiquidationWsCollector(Collector):

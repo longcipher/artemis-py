@@ -5,6 +5,8 @@ Orderly liquidation searcher bot
 ## Run
 
 ```sh
+# Required python >= 3.10
+pip install poetry
 poetry install # install all dependencies in the virtualenv
 poetry shell # spawn a shell within the virtual environment
 # run it in company's vpn in qa environment or use the staging environment

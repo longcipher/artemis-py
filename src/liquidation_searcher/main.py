@@ -1,6 +1,5 @@
 import argparse
 import asyncio
-import logging
 from argparse import Namespace
 
 import yaml
@@ -16,11 +15,7 @@ from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
 from liquidation_searcher.router import run_web
 from liquidation_searcher.strategies.direct import DirectStrategy
 from liquidation_searcher.utils.event_loop import get_loop
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from liquidation_searcher.utils.log import logger, set_level
 
 
 def parse_args() -> Namespace:
@@ -37,11 +32,12 @@ def parse_args() -> Namespace:
 
 
 async def main(args: Namespace):
-    logger.info("parsing config file: %s", args.config)
+    set_level("INFO")
+    logger.info("parsing config file: {}", args.config)
 
     with open(args.config, "r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
-    logger.info("parsed configs: %s", config)
+    logger.info("parsed configs: {}", config)
 
     orderly_account_id = config["orderly"]["account_id"]
     orderly_ws_public_endpoint = config["orderly"]["ws_public_endpoint"]

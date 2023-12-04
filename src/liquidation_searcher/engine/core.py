@@ -1,13 +1,8 @@
 import asyncio
-import logging
 from typing import List
 
 from liquidation_searcher.types import Collector, Executor, Strategy
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from liquidation_searcher.utils.log import logger
 
 
 class Engine:
@@ -44,7 +39,7 @@ class Engine:
         while True:
             event = await collector.get_event_stream()
             if event is not None:
-                logger.info("engine collector event: %s", event)
+                logger.info("engine collector event: {}", event)
                 await self.event_queue.put(event)
             await asyncio.sleep(0.1)
 
@@ -53,7 +48,7 @@ class Engine:
         while True:
             if not self.event_queue.empty():
                 event = await self.event_queue.get()
-                logger.info("engine strategy event: %s", event)
+                logger.info("engine strategy event: {}", event)
                 if event is not None:
                     action = await self.strategy.process_event(event)
                     await self.action_queue.put(action)
@@ -64,9 +59,9 @@ class Engine:
         while True:
             if not self.action_queue.empty():
                 action = await self.action_queue.get()
-                logger.info("engine executor action: %s", action)
+                logger.info("engine executor action: {}", action)
                 if action is not None:
-                    logger.info("executor action: %s", action)
+                    logger.info("executor action: {}", action)
                     await self.executor.execute(action)
             await asyncio.sleep(0.1)
 

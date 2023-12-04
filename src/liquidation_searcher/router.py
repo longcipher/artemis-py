@@ -1,13 +1,8 @@
-import logging
-
 from aiohttp import web
 
-from .handlers.health import health_check
+from liquidation_searcher.utils.log import logger
 
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from .handlers.health import health_check
 
 
 def web_app(port):
@@ -17,7 +12,7 @@ def web_app(port):
             web.get("/health", health_check),
         ]
     )
-    logger.info("port: %s", port)
+    logger.info("listening on port: {}", port)
     return app
 
 

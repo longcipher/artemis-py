@@ -1,12 +1,7 @@
-import logging
 from typing import Set
 
 from liquidation_searcher.types import ActionType, EventType, LiquidationType, Strategy
-
-logging.basicConfig(
-    format="%(asctime)s %(levelname)s %(name)s %(message)s", level=logging.INFO
-)
-logger = logging.getLogger(__name__)
+from liquidation_searcher.utils.log import logger
 
 
 class DirectStrategy(Strategy):
@@ -19,7 +14,7 @@ class DirectStrategy(Strategy):
         pass
 
     async def process_event(self, event):
-        logger.info("DirectStrategy process_event: %s", event)
+        logger.info("DirectStrategy process_event: {}", event)
         # ts = event["timestamp"]
         # filter outdated events
         # if datetime.now().timestamp() * 1000 - ts > 300:
@@ -45,7 +40,7 @@ class DirectStrategy(Strategy):
                 # only process the first position
                 if action["type"] == LiquidationType.CLAIM:
                     break
-            logger.info("DirectStrategy rest action: %s", action)
+            logger.info("DirectStrategy rest action: {}", action)
             self.processed_liquidations.add(action["liquidation_id"])
             return action
         elif event["event_type"] == EventType.ORDERLY_LIQUIDATION_WS:
@@ -73,5 +68,5 @@ class DirectStrategy(Strategy):
             self.processed_liquidations.add(action["liquidation_id"])
             return action
         else:
-            logger.warning("Unknown event type: %s", event["event_type"])
+            logger.warning("Unknown event type: {}", event["event_type"])
             return
