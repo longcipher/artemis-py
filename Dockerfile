@@ -1,4 +1,4 @@
-FROM python:3.12-bookworm as builder
+FROM python:3.10-bookworm as builder
 
 RUN pip install poetry
 
@@ -17,7 +17,7 @@ COPY . .
 RUN poetry config installer.max-workers 10
 RUN poetry install -n --without dev --no-ansi && rm -rf "$POETRY_CACHE_DIR"
 
-FROM python:3.12-slim-bookworm as runtime
+FROM python:3.10-slim-bookworm as runtime
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"

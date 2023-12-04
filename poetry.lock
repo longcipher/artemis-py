@@ -125,17 +125,6 @@ files = [
 frozenlist = ">=1.1.0"
 
 [[package]]
-name = "argparse"
-version = "1.4.0"
-description = "Python command-line parsing library"
-optional = false
-python-versions = "*"
-files = [
-    {file = "argparse-1.4.0-py2.py3-none-any.whl", hash = "sha256:c31647edb69fd3d465a847ea3157d37bed1f95f19760b11a47aa91c04b666314"},
-    {file = "argparse-1.4.0.tar.gz", hash = "sha256:62b089a55be1d8949cd2bc7e0df0bddb9e028faefc8c32038cc84862aefdd6e4"},
-]
-
-[[package]]
 name = "async-timeout"
 version = "4.0.3"
 description = "Timeout context manager for asyncio programs"
@@ -222,13 +211,13 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "ccxt"
-version = "4.1.70"
+version = "4.1.75"
 description = "A JavaScript / TypeScript / Python / C# / PHP cryptocurrency trading library with support for 130+ exchanges"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ccxt-4.1.70-py2.py3-none-any.whl", hash = "sha256:499549067f43437ef370f1900cfdd1352b98ab2091c6dbc9125eda591aa9bf73"},
-    {file = "ccxt-4.1.70.tar.gz", hash = "sha256:764f374d14b26ff35d3be1d07500108b19374d2d500e1675452079ab8b633848"},
+    {file = "ccxt-4.1.75-py2.py3-none-any.whl", hash = "sha256:098c600f0a840f89bb920392701681f25dc25b0ecd626cf4b74468d3b920820d"},
+    {file = "ccxt-4.1.75.tar.gz", hash = "sha256:5c7cc16110204f481e566f9036884fa7722ddac446d101796edff8d7611db925"},
 ]
 
 [package.dependencies]
@@ -1532,4 +1521,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1f46007261f1fc2994c198b0f00d16de14f00e21cdf640d65a2e6f5a310511ac"
+content-hash = "d7bf2de933756a7f2305bbaae76c3874f68aa0ca3e72ad15e9d029160576de85"
