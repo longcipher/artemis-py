@@ -1,23 +1,8 @@
 app:
-  proxy: 'http://127.0.0.1:7890'
+  # proxy: 'http://127.0.0.1:7890'
   port: 8088
-binance:
-  testnet: false
-  symbol: 'BTC/USDC'
-  api_key: ''
-  secret_key: ''
 orderly:
-  testnet: true
-  symbol: 'BTC/USDC'
   account_id: '0x4546c076e1d6ae0013195316c0c7b405699c839bb760a42f41005103134dcf3f'
-  orderly_key: 'Ewi5Ts9J9CzdFwQNfkgMK8RAzAD7xtsZZSwt8y1KdMzT'
-  orderly_secret: 'HLPtKnSy1Ur4W8pe5LiGbmeBPVMSFSRVVGHQs3yGQCx7'
   rest_endpoint: 'https://testnet-api-evm.orderly.org'
   ws_public_endpoint: 'wss://testnet-ws-evm.orderly.network/ws/stream/'
   ws_private_endpoint: 'wss://testnet-ws-private-evm.orderly.network/v2/ws/private/stream/'
-woo:
-  testnet: true
-  symbol: 'BTC/USDT'
-  api_key: 'ZooFkw0izItvBnobplhqRw=='
-  secret_key: 'VOWF62QUQ7KBKPTH5CO4PU26RDMK'
-  app_id: 'dce5d86f-e373-42f7-8afd-f743e18617ca'

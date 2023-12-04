@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import os
 from argparse import Namespace
 
 import yaml
@@ -42,8 +43,11 @@ async def main(args: Namespace):
     orderly_account_id = config["orderly"]["account_id"]
     orderly_ws_public_endpoint = config["orderly"]["ws_public_endpoint"]
     orderly_rest_endpoint = config["orderly"]["rest_endpoint"]
-    orderly_key = config["orderly"]["orderly_key"]
-    orderly_secret = config["orderly"]["orderly_secret"]
+    orderly_key = os.getenv("ORDERLY_KEY")
+    orderly_secret = os.getenv("ORDERLY_SECRET")
+    if orderly_key is None or orderly_secret is None:
+        logger.error("ORDERLY_KEY or ORDERLY_SECRET is not set")
+        raise ValueError("ORDERLY_KEY or ORDERLY_SECRET is not set")
     port = config["app"]["port"]
 
     loop = get_loop()
