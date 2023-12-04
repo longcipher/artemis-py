@@ -36,43 +36,59 @@ class Engine:
     def add_executor(self, executor: Executor):
         self.executors.append(executor)
 
-    async def run_collector(self, collector: Collector):
-        collector.start(timeout=30)
+    async def run_collectors(self):
+        for collector in self.collectors:
+            collector.start(timeout=30)
         while True:
-            event = await collector.get_event_stream()
-            if event is not None:
-                logger.info("engine collector event: {}", event)
-                await self.event_queue.put(event)
+            for collector in self.collectors:
+                event = await collector.get_event_stream()
+                if event is not None:
+                    logger.info("engine collector event: {}", event)
+                    await self.event_queue.put(event)
             await asyncio.sleep(0.1)
 
-    async def run_strategy(self, strategy: Strategy):
-        await strategy.sync_state()
+    async def run_strategies(self):
+        for strategy in self.strategies:
+            await strategy.sync_state()
         while True:
             if not self.event_queue.empty():
                 event = await self.event_queue.get()
-                logger.info("engine strategy event: {}", event)
                 if event is not None:
-                    action = await strategy.process_event(event)
-                    await self.action_queue.put(action)
+                    logger.info("engine strategy event: {}", event)
+
+                    async def process_event(strategy, event):
+                        action = await strategy.process_event(event)
+                        await self.action_queue.put(action)
+
+                    tasks = []
+                    for strategy in self.strategies:
+                        tasks.append(
+                            asyncio.create_task(process_event(strategy, event))
+                        )
+                    await asyncio.gather(*tasks)
             await asyncio.sleep(0.1)
 
-    async def run_executor(self, executor: Executor):
-        await executor.sync_state()
+    async def run_executors(self):
+        for executor in self.executors:
+            await executor.sync_state()
         while True:
             if not self.action_queue.empty():
                 action = await self.action_queue.get()
-                logger.info("engine executor action: {}", action)
                 if action is not None:
-                    logger.info("executor action: {}", action)
-                    await executor.execute(action)
+                    logger.info("engine executor action: {}", action)
+
+                    async def execute(executor, action):
+                        await executor.execute(action)
+
+                    tasks = []
+                    for executor in self.executors:
+                        tasks.append(asyncio.create_task(execute(executor, action)))
+                    await asyncio.gather(*tasks)
             await asyncio.sleep(0.1)
 
     async def run(self):
-        tasks = []
-        for executor in self.executors:
-            tasks.append(asyncio.create_task(self.run_executor(executor)))
-        for strategy in self.strategies:
-            tasks.append(asyncio.create_task(self.run_strategy(strategy)))
-        for collector in self.collectors:
-            tasks.append(asyncio.create_task(self.run_collector(collector)))
-        await asyncio.gather(*tasks)
+        self.tasks = []
+        self.tasks.append(asyncio.create_task(self.run_executors()))
+        self.tasks.append(asyncio.create_task(self.run_strategies()))
+        self.tasks.append(asyncio.create_task(self.run_collectors()))
+        await asyncio.gather(*self.tasks)
