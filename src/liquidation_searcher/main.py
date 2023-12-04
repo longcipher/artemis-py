@@ -34,13 +34,15 @@ def parse_args() -> Namespace:
 
 
 async def main(args: Namespace):
-    set_level("INFO")
-    logger.info("parsing config file: {}", args.config)
+    print("parsing config file: {}", args.config)
 
     with open(args.config, "r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
-    logger.info("parsed configs: {}", config)
+    print("parsed configs: {}", config)
 
+    port = config["app"]["port"]
+    level = config["app"]["level"]
+    set_level(level)
     orderly_account_id = config["orderly"]["account_id"]
     orderly_ws_public_endpoint = config["orderly"]["ws_public_endpoint"]
     orderly_rest_endpoint = config["orderly"]["rest_endpoint"]
@@ -49,7 +51,6 @@ async def main(args: Namespace):
     if orderly_key is None or orderly_secret is None:
         logger.error("ORDERLY_KEY or ORDERLY_SECRET is not set")
         raise ValueError("ORDERLY_KEY or ORDERLY_SECRET is not set")
-    port = config["app"]["port"]
     claim_percent = config["orderly"]["claim_percent"]
     symbol_qty = parse_symbol_qty(config["orderly"]["symbol_qty"])
 

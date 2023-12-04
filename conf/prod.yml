@@ -1,5 +1,5 @@
 app:
-  # proxy: 'http://127.0.0.1:7890'
+  level: "INFO"
   port: 8088
 orderly:
   account_id: '0x4546c076e1d6ae0013195316c0c7b405699c839bb760a42f41005103134dcf3f'

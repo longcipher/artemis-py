@@ -119,6 +119,7 @@ class OrderlyExecutor(Executor):
                     order_quantity=self.format_qty(
                         position["symbol"], abs(position["position_qty"])
                     ),
+                    reduce_only=True,
                 )
                 logger.info("orderly executor create_order json: {}", json)
                 res = await self.orderly_client.create_order(json)
