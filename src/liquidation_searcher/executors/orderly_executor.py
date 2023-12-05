@@ -155,9 +155,16 @@ class OrderlyExecutor(Executor):
         return (qty, ratio)
 
     def format_qty(self, symbol, qty):
-        return float(
+        # return float(
+        #     Decimal(str(qty)).quantize(
+        #         Decimal(self.symbol_info[symbol]["base_tick"]),
+        #         rounding=ROUND_DOWN,
+        #     )
+        # )
+        return format(
             Decimal(str(qty)).quantize(
                 Decimal(self.symbol_info[symbol]["base_tick"]),
                 rounding=ROUND_DOWN,
-            )
+            ),
+            "f",
         )
