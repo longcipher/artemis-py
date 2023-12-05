@@ -75,7 +75,7 @@ class OrderlyExecutor(Executor):
                 if action["type"] == LiquidationType.LIQUIDATED:
                     json = dict(
                         liquidation_id=action["liquidation_id"],
-                        ratio_qty_request=ratio,  # TODO: precision check
+                        ratio_qty_request=ratio,
                     )
                     logger.info(
                         "orderly executor claim_liquidated_positions json: {}", json
@@ -110,7 +110,7 @@ class OrderlyExecutor(Executor):
                 elif position["position_qty"] < 0:
                     side = "BUY"
                 else:
-                    logger.error(
+                    logger.debug(
                         f"Unknown position symbol: {position['symbol']}, qty: {position['position_qty']}"
                     )
                     continue

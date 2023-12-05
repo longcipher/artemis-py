@@ -2,6 +2,8 @@
 
 Orderly liquidations TPS scale with number of liquidators, so we implement an open source liquidator bot to make it easier to let other traders join the liquidation party.
 
+**WARNING: The bot is not fully tested! Use at Your Own Risk!**
+
 This project contains two parts:
 
 * A real-time async event-driven trading framework heavily inspired by [paradigmxyz/artemis](https://github.com/paradigmxyz/artemis).
