@@ -138,7 +138,9 @@ class OrderlyExecutor(Executor):
         if position_qty == 0 or mark_price == 0:
             return (0, 0)
         qty = abs(self.max_notional / mark_price)
-        if qty < float(self.symbol_info[symbol]["min_notional"]):
+        if qty < float(self.symbol_info[symbol]["base_min"]):
+            return (0, 0)
+        if qty * mark_price < float(self.symbol_info[symbol]["min_notional"]):
             return (0, 0)
         qty = min(qty, abs(position_qty))
         ratio = abs(
