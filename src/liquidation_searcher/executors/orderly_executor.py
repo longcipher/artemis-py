@@ -121,6 +121,11 @@ class OrderlyExecutor(Executor):
                     ),
                     # reduce_only=True,
                 )
+                if json["order_quantity"] == 0:
+                    logger.debug(
+                        f"Empty position quantity symbol: {position['symbol']}, qty: {position['position_qty']}"
+                    )
+                    continue
                 logger.info("orderly executor create_order json: {}", json)
                 res = await self.orderly_client.create_order(json)
                 logger.info("orderly executor create_order res: {}", res)
@@ -137,9 +142,9 @@ class OrderlyExecutor(Executor):
             return (0, 0)
         qty = abs(position_qty * self.claim_percent)
         if qty < self.symbol_qty[symbol]["min_qty"]:
-            qty = self.symbol_qty[symbol]["min_qty"]
+            qty = min(self.symbol_qty[symbol]["min_qty"], position_qty)
         elif qty > self.symbol_qty[symbol]["max_qty"]:
-            qty = self.symbol_qty[symbol]["max_qty"]
+            qty = min(self.symbol_qty[symbol]["max_qty"], position_qty)
         else:
             return (0, 0)
         ratio = abs(
