@@ -120,7 +120,7 @@ class OrderlyExecutor(Executor):
                     order_type="MARKET",
                     side=side,
                     order_quantity=self.format_qty(symbol, abs(position_qty)),
-                    # reduce_only=True,
+                    reduce_only=True,
                 )
                 if json["order_quantity"] == 0:
                     logger.debug(
@@ -155,12 +155,6 @@ class OrderlyExecutor(Executor):
         return (qty, ratio)
 
     def format_qty(self, symbol, qty):
-        # return float(
-        #     Decimal(str(qty)).quantize(
-        #         Decimal(self.symbol_info[symbol]["base_tick"]),
-        #         rounding=ROUND_DOWN,
-        #     )
-        # )
         return format(
             Decimal(str(qty)).quantize(
                 Decimal(self.symbol_info[symbol]["base_tick"]),
