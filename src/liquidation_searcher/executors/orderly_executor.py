@@ -11,8 +11,6 @@ from liquidation_searcher.utils.log import logger
 class OrderlyExecutor(Executor):
     symbol_info: Dict[str, Any]
     claim_percent: float
-    min_notional: float
-    max_notional: float
     symbol_qty: Dict[str, Any]
 
     def __init__(
