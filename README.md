@@ -33,6 +33,7 @@ plaintext config: [staging.yml](/conf/staging.yml)
 
 ```yaml
 app:
+  level: "INFO"
   port: 8088 # health check port
 orderly:
   account_id: '' # your account id
