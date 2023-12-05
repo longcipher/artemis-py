@@ -39,13 +39,8 @@ orderly:
   rest_endpoint: 'https://testnet-api-evm.orderly.org'
   ws_public_endpoint: 'wss://testnet-ws-evm.orderly.network/ws/stream/'
   ws_private_endpoint: 'wss://testnet-ws-private-evm.orderly.network/v2/ws/private/stream/'
-  claim_percent: 0.001 # claim percent of the liquidation quantity
-  symbol_qty:
-    # notional range: 100U ~ 1000U, 10x leverage
-    - ['PERP_BTC_USDC', [0.02, 0.2]]
-    - ['PERP_ETH_USDC', [0.4, 4]]
-    - ['PERP_NEAR_USDC', [460, 4600]]
-    - ['PERP_WOO_USDC', [4250, 42500]]
+  max_notional: 1000 # max notional of each liquidation claim, it already includes the leverage
+  liquidation_symbols: ['PERP_BTC_USDC', 'PERP_ETH_USDC', 'PERP_NEAR_USDC', 'PERP_WOO_USDC'] # liquidation symbols whitelist
 ```
 
 secret config: [.envrc.example](/.envrc.example)
