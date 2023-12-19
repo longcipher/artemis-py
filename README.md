@@ -40,7 +40,7 @@ orderly:
   rest_endpoint: 'https://testnet-api-evm.orderly.org'
   ws_public_endpoint: 'wss://testnet-ws-evm.orderly.network/ws/stream/'
   ws_private_endpoint: 'wss://testnet-ws-private-evm.orderly.network/v2/ws/private/stream/'
-  max_notional: 1000 # max notional of each liquidation claim, it already includes the leverage
+  max_notional: 1000 # max notional of each liquidation claim, it already includes the leverage, should be greater than min notional of the liquidated type claim
   liquidation_symbols: ['PERP_BTC_USDC', 'PERP_ETH_USDC', 'PERP_NEAR_USDC', 'PERP_WOO_USDC'] # liquidation symbols whitelist
 ```
 

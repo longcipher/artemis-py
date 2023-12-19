@@ -35,6 +35,7 @@ class Executor(ABC):
 class EventType(str, Enum):
     ORDERLY_LIQUIDATION_REST = "orderly_liquidation_rest"
     ORDERLY_LIQUIDATION_WS = "orderly_liquidation_ws"
+    ORDERLY_EXECUTOR_RESULT = "orderly_executor_result"
 
 
 class ActionType(str, Enum):

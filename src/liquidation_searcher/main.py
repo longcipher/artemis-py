@@ -68,8 +68,8 @@ async def main(args: Namespace):
         loop=loop,
     )
     engine.add_collector(orderly_liquidation_rest_collector)
-    direct_strategy = OrderlyHedgeStrategy()
-    engine.add_strategy(direct_strategy)
+    orderly_hedge_strategy = OrderlyHedgeStrategy()
+    engine.add_strategy(orderly_hedge_strategy)
     orderly_executor = OrderlyExecutor(
         account_id=orderly_account_id,
         endpoint=orderly_rest_endpoint,
