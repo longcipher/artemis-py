@@ -67,7 +67,7 @@ class OrderlyExecutor(Executor):
                 if total_notional <= self.max_notional:
                     ratio = 1
                 else:
-                    ratio = self.max_notional / total_notional
+                    ratio = self.format_ratio(self.max_notional / total_notional)
                 json = dict(
                     liquidation_id=liquidation_id,
                     ratio_qty_request=ratio,
@@ -160,14 +160,7 @@ class OrderlyExecutor(Executor):
         if qty * mark_price < float(self.symbol_info[symbol]["min_notional"]):
             return (0, 0)
         qty = min(qty, abs(position_qty))
-        ratio = abs(
-            float(
-                Decimal(str(qty / position_qty)).quantize(
-                    Decimal("0.001"),
-                    rounding=ROUND_DOWN,
-                )
-            )
-        )
+        ratio = self.format_ratio(qty / position_qty)
         qty = qty if position_qty > 0 else -qty
         return (qty, ratio)
 
@@ -178,4 +171,14 @@ class OrderlyExecutor(Executor):
                 rounding=ROUND_DOWN,
             ),
             "f",
+        )
+
+    def format_ratio(self, ratio):
+        return abs(
+            float(
+                Decimal(str(ratio)).quantize(
+                    Decimal("0.001"),
+                    rounding=ROUND_DOWN,
+                )
+            )
         )
