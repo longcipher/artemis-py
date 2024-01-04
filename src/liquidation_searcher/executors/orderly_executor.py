@@ -48,7 +48,10 @@ class OrderlyExecutor(Executor):
     async def execute(self, action):
         if action["action_type"] == ActionType.ORDERLY_LIQUIDATION_ORDER:
             liquidation_id = action["liquidation_id"]
-            if action["type"] == LiquidationType.LIQUIDATED:
+            if (
+                action["type"] == LiquidationType.LIQUIDATED
+                or action["type"] == LiquidationType.CLAIM
+            ):
                 total_notional = 0
                 ratio = 0
                 for position in action["positions_by_perp"]:
@@ -77,40 +80,40 @@ class OrderlyExecutor(Executor):
                 )
                 res = await self.orderly_client.claim_liquidated_positions(json)
                 logger.info("orderly executor claim_liquidated_positions res: {}", res)
-            elif action["type"] == LiquidationType.CLAIM:
-                for position in action["positions_by_perp"]:
-                    symbol = position["symbol"]
-                    position_qty = position["position_qty"]
-                    if symbol not in self.liquidation_symbols:
-                        logger.error(
-                            "orderly executor claim ignored symbol: {}, not configed in liquidation_symbols",
-                            symbol,
-                        )
-                        continue
-                    future_prices = (
-                        await self.orderly_client.get_futures_for_one_market(symbol)
-                    )
-                    mark_price = future_prices["data"]["mark_price"]
+            # elif action["type"] == LiquidationType.CLAIM:
+            #     for position in action["positions_by_perp"]:
+            #         symbol = position["symbol"]
+            #         position_qty = position["position_qty"]
+            #         if symbol not in self.liquidation_symbols:
+            #             logger.error(
+            #                 "orderly executor claim ignored symbol: {}, not configed in liquidation_symbols",
+            #                 symbol,
+            #             )
+            #             continue
+            #         future_prices = (
+            #             await self.orderly_client.get_futures_for_one_market(symbol)
+            #         )
+            #         mark_price = future_prices["data"]["mark_price"]
 
-                    (qty, ratio) = self.calc_claim_qty(symbol, position_qty, mark_price)
-                    if qty == 0 or ratio == 0:
-                        logger.error(
-                            "orderly executor calc_claim_qty failed symbol: {}, qty: {}",
-                            symbol,
-                            position_qty,
-                        )
-                        continue
+            #         (qty, ratio) = self.calc_claim_qty(symbol, position_qty, mark_price)
+            #         if qty == 0 or ratio == 0:
+            #             logger.error(
+            #                 "orderly executor calc_claim_qty failed symbol: {}, qty: {}",
+            #                 symbol,
+            #                 position_qty,
+            #             )
+            #             continue
 
-                    json = dict(
-                        liquidation_id=liquidation_id,
-                        symbol=symbol,
-                        qty_request=self.format_qty(symbol, qty),
-                    )
-                    logger.info("orderly executor claim_insurance_fund json: {}", json)
-                    res = await self.orderly_client.claim_insurance_fund(json)
-                    logger.info("orderly executor claim_insurance_fund res: {}", res)
-                    # We have only one liquidation_id, so we can only claim the first symbol for now
-                    break
+            #         json = dict(
+            #             liquidation_id=liquidation_id,
+            #             symbol=symbol,
+            #             qty_request=self.format_qty(symbol, qty),
+            #         )
+            #         logger.info("orderly executor claim_insurance_fund json: {}", json)
+            #         res = await self.orderly_client.claim_insurance_fund(json)
+            #         logger.info("orderly executor claim_insurance_fund res: {}", res)
+            #         # We have only one liquidation_id, so we can only claim the first symbol for now
+            #         break
             else:
                 logger.error(f"Unknown liquidation type: {action['type']}")
 
