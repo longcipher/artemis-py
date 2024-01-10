@@ -9,7 +9,7 @@ packages = [{include = "liquidation_searcher", from = "src"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 pyyaml = "^6.0.1"
-ccxt = "^4.2.4"
+ccxt = "^4.2.10"
 orderly-sdk = "0.2.2"
 wootrade-sdk = "^0.1.1"
 types-pyyaml = "^6.0.12.12"

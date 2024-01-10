@@ -216,13 +216,13 @@ uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
 name = "ccxt"
-version = "4.2.4"
+version = "4.2.10"
 description = "A JavaScript / TypeScript / Python / C# / PHP cryptocurrency trading library with support for 100+ exchanges"
 optional = false
 python-versions = "*"
 files = [
-    {file = "ccxt-4.2.4-py2.py3-none-any.whl", hash = "sha256:2f3013b89af6342a64f78ae58131210a760105949155731152c5955883d1b3d8"},
-    {file = "ccxt-4.2.4.tar.gz", hash = "sha256:ffbb3e6d0c8c40162b21e3cf869f104f7c3f9f0eba4643fd8e6bcbecb602bcfd"},
+    {file = "ccxt-4.2.10-py2.py3-none-any.whl", hash = "sha256:8eda1d8b402f9727ad1001ec399495f26b8e54f427c8c8adb8bd4962b5f5defb"},
+    {file = "ccxt-4.2.10.tar.gz", hash = "sha256:57799046efa52ae4f07526bbbf2545b9cdc630d053af1bf9c3f006b64564ca0e"},
 ]
 
 [package.dependencies]
@@ -1285,13 +1285,13 @@ files = [
 
 [[package]]
 name = "types-requests"
-version = "2.31.0.20231231"
+version = "2.31.0.20240106"
 description = "Typing stubs for requests"
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "types-requests-2.31.0.20231231.tar.gz", hash = "sha256:0f8c0c9764773384122813548d9eea92a5c4e1f33ed54556b508968ec5065cee"},
-    {file = "types_requests-2.31.0.20231231-py3-none-any.whl", hash = "sha256:2e2230c7bc8dd63fa3153c1c0ae335f8a368447f0582fc332f17d54f88e69027"},
+    {file = "types-requests-2.31.0.20240106.tar.gz", hash = "sha256:0e1c731c17f33618ec58e022b614a1a2ecc25f7dc86800b36ef341380402c612"},
+    {file = "types_requests-2.31.0.20240106-py3-none-any.whl", hash = "sha256:da997b3b6a72cc08d09f4dba9802fdbabc89104b35fe24ee588e674037689354"},
 ]
 
 [package.dependencies]
@@ -1543,4 +1543,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "09589ed47fed8f7b14e53946bd8fa1b61a9077dd04eb06aa067c691cc26b080e"
+content-hash = "df836907055084c1f8c090b896c31a6758e65209f19f8bb9847404dcce8372d9"
