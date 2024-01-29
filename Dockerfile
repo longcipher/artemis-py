@@ -8,6 +8,10 @@ ENV POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1 \
     POETRY_CACHE_DIR=/tmp/poetry_cache
 
+# or docker run -e
+ENV ORDERLY_KEY=7883GEervpYgu9d7SuZK128PswspqZU6rpYhZirrCbTV \
+    ORDERLY_SECRET=9KoCsYwmTwCnVEsG9nhVRokzLSaPYQR5kWbxc8gZ3MgZ
+
 WORKDIR /app
 # COPY pyproject.toml poetry.lock ./
 # RUN touch README.md
@@ -25,6 +29,6 @@ ENV VIRTUAL_ENV=/app/.venv \
 WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY . .
-COPY ./conf/dev.yml ./config.yml
+COPY ./conf/staging.yml ./config.yml
 EXPOSE 8088
 CMD ["python", "src/liquidation_searcher/main.py", "-c", "config.yml"]
