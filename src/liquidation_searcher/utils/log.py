@@ -2,6 +2,7 @@ import sys
 
 from loguru import logger
 
+logger.remove()
 logger.add(
     sys.stderr,
     format='{{"timestamp":"{time}","level":"{level}","message":"{message}"}}',

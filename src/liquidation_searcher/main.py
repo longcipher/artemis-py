@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 from argparse import Namespace
+from pprint import pprint
 
 import yaml
 
@@ -21,14 +22,59 @@ def parse_args() -> Namespace:
 
 
 async def woo_orderbook(config):
-    symbol = config["woo"]["symbol"]
     api_key = config["woo"]["api_key"]
     secret_key = config["woo"]["secret_key"]
     proxy = config["app"]["proxy"]
     testnet = config["woo"]["testnet"]
-    woo = Woo(symbol, api_key, secret_key, proxy, testnet)
-    woo.open()
-    await woo.watch_order_book()
+    uid = config["woo"]["app_id"]
+
+    woo = Woo(api_key, secret_key, uid, testnet, proxy)
+    await woo.open()
+    # await woo.watch_order_book()
+    # markets = await woo.ccxt().fetch_markets()
+    # logger.info("markets: {}", markets)
+    # for m in markets:
+    #     logger.info("market: {}", m)
+
+    # order_book = await woo.ccxt().fetch_order_book(symbol, limit=None, params={})
+    # logger.info("order_book: {}", order_book)
+
+    # trades = await woo.ccxt().fetch_trades(symbol, since=None, limit=None, params={})
+    # logger.info("trades: {}", trades)
+    # for t in trades:
+    #     logger.info("time: {}", t["datetime"])
+
+    # ohlcv = await woo.ccxt().fetch_ohlcv(
+    #     symbol, timeframe="1m", since=None, limit=None, params={}
+    # )
+    # logger.info("ohlcv: {}", ohlcv)
+
+    # markets = await woo.ccxt().load_markets()
+    # logger.info("loaded markets: {}", markets)
+
+    # all_methods = woo.all_methods()
+    # logger.info("all methods: {}", all_methods)
+
+    # all_properties = woo.all_properties()
+    # logger.info("all properties: {}", all_properties)
+    # all_options = woo.all_options()
+    # logger.info("all options: {}", all_options)
+    # exchange_info = woo.exchange_info()
+    # logger.info("exchange info: {}", exchange_info)
+    # pprint(exchange_info)
+    # markets = await woo.load_markets()
+    # pprint(markets)
+
+    # m = woo.ccxt().markets["BTC/USDT"]
+    # m = woo.ccxt().market("BTC/USDT")
+    # pprint(m)
+
+    d = woo.ccxt().symbols
+    pprint(d)
+
+    # s = woo.ccxt().symbols
+    # pprint(s)
+
     await woo.close()
 
 
