@@ -1,3 +1,21 @@
+"""
+Orderly Liquidation Searcher Example
+
+This example demonstrates how to use the Artemis framework to build a 
+liquidation searcher for the Orderly Network. It shows the complete workflow:
+
+1. Collect liquidation events from Orderly's REST and WebSocket APIs
+2. Process events to identify profitable liquidation opportunities
+3. Execute liquidation claims and hedge positions
+
+Usage:
+    python main.py -c ../../conf/staging.yml
+
+Requirements:
+    - orderly-sdk>=0.2.2
+    - Environment variables: ORDERLY_KEY, ORDERLY_SECRET
+"""
+
 import argparse
 import asyncio
 import os
@@ -5,18 +23,15 @@ from argparse import Namespace
 
 import yaml
 
-from liquidation_searcher.collectors.orderly_liquidation_rest import (
-    OrderlyLiquidationRestCollector,
-)
-from liquidation_searcher.collectors.orderly_liquidation_ws import (
-    OrderlyLiquidationWsCollector,
-)
-from liquidation_searcher.engine.core import Engine
-from liquidation_searcher.executors.orderly_executor import OrderlyExecutor
-from liquidation_searcher.router import run_web
-from liquidation_searcher.strategies.orderly_hedge import OrderlyHedgeStrategy
-from liquidation_searcher.utils.event_loop import get_loop
-from liquidation_searcher.utils.log import logger, set_level
+from artemis import Engine
+from artemis.utils.log import logger, set_level
+from artemis.utils.event_loop import get_loop
+
+from collectors.orderly_liquidation_rest import OrderlyLiquidationRestCollector
+from collectors.orderly_liquidation_ws import OrderlyLiquidationWsCollector
+from strategies.orderly_hedge import OrderlyHedgeStrategy
+from executors.orderly_executor import OrderlyExecutor
+from router import run_web
 
 
 def parse_args() -> Namespace:
@@ -33,43 +48,57 @@ def parse_args() -> Namespace:
 
 
 async def main(args: Namespace):
-    print("parsing config file: {}", args.config)
+    """Main entry point for the liquidation searcher."""
+    logger.info("Starting Orderly Liquidation Searcher...")
+    logger.info(f"Parsing config file: {args.config}")
 
+    # Load configuration
     with open(args.config, "r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
-    print("parsed configs: {}", config)
+    logger.info(f"Loaded configuration: {config}")
 
+    # Extract configuration values
     port = config["app"]["port"]
     level = config["app"]["level"]
     set_level(level)
+    
     orderly_account_id = config["orderly"]["account_id"]
     orderly_ws_public_endpoint = config["orderly"]["ws_public_endpoint"]
     orderly_rest_endpoint = config["orderly"]["rest_endpoint"]
+    max_notional = config["orderly"]["max_notional"]
+    liquidation_symbols = config["orderly"]["liquidation_symbols"]
+
+    # Get API credentials from environment
     orderly_key = os.getenv("ORDERLY_KEY")
     orderly_secret = os.getenv("ORDERLY_SECRET")
     if orderly_key is None or orderly_secret is None:
         logger.error("ORDERLY_KEY or ORDERLY_SECRET is not set")
         raise ValueError("ORDERLY_KEY or ORDERLY_SECRET is not set")
-    max_notional = config["orderly"]["max_notional"]
-    liquidation_symbols = config["orderly"]["liquidation_symbols"]
 
+    # Initialize the Artemis engine
     loop = get_loop()
-
     engine = Engine()
+
+    # Add collectors
     orderly_liquidation_ws_collector = OrderlyLiquidationWsCollector(
         account_id=orderly_account_id,
         endpoint=orderly_ws_public_endpoint,
         loop=loop,
     )
     engine.add_collector(orderly_liquidation_ws_collector)
+
     orderly_liquidation_rest_collector = OrderlyLiquidationRestCollector(
         account_id=orderly_account_id,
         endpoint=orderly_rest_endpoint,
         loop=loop,
     )
     engine.add_collector(orderly_liquidation_rest_collector)
+
+    # Add strategy
     orderly_hedge_strategy = OrderlyHedgeStrategy()
     engine.add_strategy(orderly_hedge_strategy)
+
+    # Add executor
     orderly_executor = OrderlyExecutor(
         account_id=orderly_account_id,
         endpoint=orderly_rest_endpoint,
@@ -79,8 +108,11 @@ async def main(args: Namespace):
         liquidation_symbols=liquidation_symbols,
     )
     engine.add_executor(orderly_executor)
-    # only for k8s health check now
+
+    # Start health check server for monitoring
     await run_web(port)
+    
+    # Start the engine
     await engine.run()
 
 

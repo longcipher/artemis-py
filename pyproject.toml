@@ -1,26 +1,44 @@
-[tool.poetry]
-name = "liquidation-searcher"
+
+[project]
+name = "artemis-py"
 version = "0.1.0"
-description = ""
-authors = ["Akagi201 <akagi201@gmail.com>"]
+description = "A real-time async event-driven trading framework inspired by paradigmxyz/artemis"
+authors = [
+	{ name = "Akagi201", email = "akagi201@gmail.com" }
+]
 readme = "README.md"
-packages = [{include = "liquidation_searcher", from = "src"}]
+requires-python = ">=3.10"
+dependencies = [
+	"pyyaml>=6.0.2",
+	"types-pyyaml>=6.0.12.20250516",
+	"aiohttp>=3.12.15",
+	"loguru>=0.7.3"
+]
 
-[tool.poetry.dependencies]
-python = "^3.10"
-pyyaml = "^6.0.1"
-ccxt = "^4.2.4"
-orderly-sdk = "0.2.2"
-wootrade-sdk = "^0.1.1"
-types-pyyaml = "^6.0.12.12"
-aiohttp = "^3.9.1"
-loguru = "^0.7.2"
-
-[tool.poetry.group.dev.dependencies]
-black = "^23.12.1"
-ruff = "^0.1.11"
-mypy = "^1.8.0"
+[project.optional-dependencies]
+dev = [
+	"ruff>=0.12.8",
+	"mypy>=1.17.1",
+	"pytest>=7.0.0",
+	"pytest-asyncio>=0.21.0"
+]
+examples = [
+	"ccxt>=4.4.99",
+	"orderly-sdk>=0.2.2"
+]
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.sdist]
+include = [
+	"/src",
+	"/examples",
+	"/docs",
+	"/conf"
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/artemis"]
+
